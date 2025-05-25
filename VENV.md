@@ -10,8 +10,73 @@ Run this command to initiate the download of the installation script and Poetry 
 - Incorporate and save the changes into your current session:   
 `source ~/.bashrc`
 - Print the current version of Poetry to verify if you can run its commands:   
-`poetry --version`  
+`poetry --version` 
 
+# Step 2: Create a project and virtual environment
+- Create a project folder  
+`mkdir my-project && cd my-project`
+- Initialize Poetry  
+`poetry init`
+- Create a virtual environment  
+`poetry install --no-root` # Skip installing the current project as a package
+- Add pre-commit as a dev dependency  
+`poetry add pre-commit --group dev`  
+- Create a pre-commit config  
+`touch .pre-commit-config.yaml`  
+- Add the following to the config file:
+```
+repos:
+  # General checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-yaml           # Validation YAML
+      - id: end-of-file-fixer     # Fixing the end of files
+      - id: trailing-whitespace   # Remove spaces at the end of lines
+
+  # Python
+  - repo: https://github.com/psf/black
+    rev: 23.12.1
+    hooks:
+      - id: black                # Code formatting
+
+  - repo: https://github.com/pycqa/flake8
+    rev: 6.1.0
+    hooks:
+      - id: flake8               # Code linting
+
+  # YAML
+  - repo: https://github.com/adrienverge/yamllint.git
+    rev: v1.33.0
+    hooks:
+      - id: yamllint             # Linting YAML
+        args: [--strict]
+
+  # Docker
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint             # Linting Dockerfile
+```      
+- Install linters  
+`poetry add black flake8 yamllint --group dev`
+- Install hadolint for Docker
+```
+sudo curl -L https://github.com/hadolint/hadolint/releases/latest/download/hadolint-Linux-x86_64 -o /usr/local/bin/hadolint
+
+sudo chmod +x /usr/local/bin/hadolint
+```
+- Initialize pre-commit  
+`poetry run pre-commit install`
+- Run checks  
+`poetry run pre-commit run --all-files`
+
+# Step 3: Working with the project
+
+To activate the virtual environment:   
+`poetry shell`  
+To exit the environment:  
+`exit`  
 
 # Шаг 1: Установка Poetry на Linux (Ubuntu)
 Сайт Poetry предлагает официальный установочный скрипт, который используется для настройки Poetry.
