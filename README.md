@@ -6,3 +6,4 @@
 - [Installation Poetry on Linux](VENV.md)
 - [Linux Standard Streams and redirecting](Std-streams-guide.md)
 - [System calls (syscalls) on Linux](Syscalls.md)
+- [Linux Signals](Signals.md)
